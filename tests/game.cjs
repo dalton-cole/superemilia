@@ -1,16 +1,32 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const html=fs.readFileSync(process.argv[2]||'public/index.html','utf8');
 const script=html.split('<script>')[1].split('</script>')[0];
-function boot(){
+function boot(options={}){
  const nodes=new Map(),classes=new Set(),gradient={addColorStop(){}},ctx=new Proxy({createLinearGradient(){return gradient}},{get:(t,k)=>t[k]||(()=>{})});
- function node(id){if(!nodes.has(id)){const listeners={};nodes.set(id,{textContent:'',innerHTML:'',value:'',hidden:false,open:false,style:{},dataset:{},classList:{toggle(){},add(){},remove(){}},setAttribute(){},focus(){},addEventListener(type,fn){(listeners[type]??=[]).push(fn)},showModal(){this.open=true},close(){this.open=false;for(const fn of listeners.close||[])fn()},getContext(){return ctx},getBoundingClientRect(){return {width:1100,height:620}},querySelectorAll(){return []},querySelector(){return null}})}return nodes.get(id)}
+ function node(id){if(!nodes.has(id)){const listeners={};nodes.set(id,{textContent:'',innerHTML:'',value:'',hidden:false,open:false,style:{},dataset:{},classList:{toggle(){},add(){},remove(){}},setAttribute(){},focus(){},setPointerCapture(){},addEventListener(type,fn){(listeners[type]??=[]).push(fn)},emit(type,event){for(const fn of listeners[type]||[])fn(event)},showModal(){this.open=true},close(){this.open=false;for(const fn of listeners.close||[])fn()},getContext(){return ctx},getBoundingClientRect(){return {width:1100,height:620}},querySelectorAll(){return []},querySelector(){return null}})}return nodes.get(id)}
  const buddies=[1,2,3].map(n=>{const b=node('buddy'+n);b.dataset.buddy=String(n);return b});
- const holds=['Space','ArrowLeft','ArrowRight','ShiftLeft'].map(k=>{const b=node(k);b.dataset.hold=k;return b});
+ const holds=['Space','ArrowLeft','ArrowRight','ArrowDown'].map(k=>{const b=node(k);b.dataset.hold=k;return b});
  const storage={};
- const sandbox={console,Math,Number,JSON,Array,Object,String,Boolean,Set,Map,setTimeout(){},requestAnimationFrame(){},localStorage:{getItem:k=>storage[k],setItem:(k,v)=>storage[k]=v},document:{querySelector:node,querySelectorAll:s=>s==='[data-buddy]'?buddies:s==='[data-hold]'?holds:[],addEventListener(){},body:{classList:{contains:c=>classes.has(c),toggle(c,on){on?classes.add(c):classes.delete(c)}}}},window:{addEventListener(){}}};
- vm.createContext(sandbox);vm.runInContext(script,sandbox);return source=>vm.runInContext(source,sandbox);
+ const timers=new Map();let clock=0,nextTimer=0;
+ const sandbox={console,Math,Number,JSON,Array,Object,String,Boolean,Set,Map,setTimeout(fn,delay=0){const id=++nextTimer;timers.set(id,{fn,at:clock+delay});return id},clearTimeout(id){timers.delete(id)},requestAnimationFrame(){},localStorage:{getItem:k=>storage[k],setItem:(k,v)=>storage[k]=v},document:{querySelector:node,querySelectorAll:s=>s==='[data-buddy]'?buddies:s==='[data-hold]'?holds:[],addEventListener(){},body:{classList:{contains:c=>classes.has(c),toggle(c,on){on?classes.add(c):classes.delete(c)}}}},window:{addEventListener(){}}};
+ vm.createContext(sandbox);vm.runInContext(script,sandbox);const run=source=>vm.runInContext(source,sandbox);
+ run.advance=ms=>{const end=clock+ms;while(true){const next=[...timers].sort((a,b)=>a[1].at-b[1].at)[0];if(!next||next[1].at>end)break;clock=next[1].at;timers.delete(next[0]);next[1].fn()}clock=end};
+ run.fire=(selector,type,event)=>node(selector).emit(type,event);run.fireHold=(code,type,event)=>holds.find(b=>b.dataset.hold===code).emit(type,event);
+ if(!options.splash)run("$('#splashScreen').close()");return run;
 }
 let checks=0;const test=(name,fn)=>{fn();console.log('✓ '+name);checks++};
+test('The artwork splash stays for five seconds, can be skipped, and never starts gameplay',()=>{
+ const run=boot({splash:true});assert(run("$('#splashScreen').open&&state==='ready'"));run.advance(4999);assert(run("$('#splashScreen').open&&!splashLeaving"));run.advance(1);assert(run('splashLeaving'));run.advance(300);assert(run("!$('#splashScreen').open&&state==='ready'&&time===0"));
+ const skip=boot({splash:true});skip("$('#skipSplash').onclick()");skip.advance(300);assert(skip("!$('#splashScreen').open&&state==='ready'"));skip.advance(6000);assert(!skip("$('#splashScreen').open"));
+});
+test('Touch controls cancel browser gestures while preserving double jump and simultaneous movement',()=>{
+ const run=boot();run("state='playing';sound=false;for(let i=0;i<3;i++)physics(STEP)");const touch=()=>({cancelable:true,defaultPrevented:false,pointerId:1,preventDefault(){this.defaultPrevented=true}});
+ const right=touch();run.fireHold('ArrowRight','pointerdown',right);const first=touch();run.fireHold('Space','touchstart',first);run.fireHold('Space','pointerdown',touch());run('physics(STEP)');assert(first.defaultPrevented);assert(run('p.jumps===1&&p.vy<0&&keys.ArrowRight'));
+ const end=touch();run.fireHold('Space','touchend',end);run.fireHold('Space','pointerup',touch());assert(end.defaultPrevented);run.fireHold('Space','touchstart',touch());run.fireHold('Space','pointerdown',touch());run('physics(STEP)');assert(run('p.jumps===2&&p.vy<0&&keys.ArrowRight'));
+ run.fireHold('ArrowRight','pointercancel',touch());assert(!run('keys.ArrowRight'));
+ const runTap=touch();run.fire('#run','touchstart',runTap);assert(runTap.defaultPrevented&&run('runLatched'));run.fire('#run','touchend',touch());run.fire('#run','touchstart',touch());assert(!run('runLatched'));
+ const powerTap=touch();run.fire('#ability','touchstart',powerTap);assert(powerTap.defaultPrevented&&run('p.power===3&&p.cooldown===8'));
+});
 test('All 60 stages have three gems, safe start/finish, varied layouts, and reachable gaps',()=>{
  const run=boot();const layouts=new Set();for(const th of ['space','candy','forest','squishy','home'])for(let i=0;i<12;i++){
  const d=run(`theme='${th}';level=${i};makeLevel();({gems:gems.length,grounds:solids.filter(a=>a.kind==='ground'),blocks:blocks.length,width:worldWidth,goal:goalX,ledges:ledges.length,hazards:hazards.length,checks:checkpoints.length})`);

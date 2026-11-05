@@ -4,6 +4,8 @@ A little platform adventure with five lands, three companion buddies, and 60 sta
 
 Play at **https://superemilia.com**. The game is hosted on GitHub Pages.
 
+On page load, the cover artwork appears for five seconds before fading into the ready screen. Phones use the square cover and wider screens use the landscape cover. **Skip intro** or Escape dismisses it early. Gameplay waits for the player to start.
+
 ## Controls
 
 | Action | Keyboard |
@@ -16,6 +18,8 @@ Play at **https://superemilia.com**. The game is hosted on GitHub Pages.
 | Pause / resume | P |
 
 On-screen controls support touch. Tap **Run** to toggle sprinting, use the large direction and jump buttons, and press **↓** on a pipe opening. Toast messages appear below the top HUD.
+
+Game text does not select on long presses. The play area and touch controls suppress browser pan, zoom, double-tap, and callout gestures; non-passive touch handlers also cancel default gestures on the canvas and game controls. Pointer controls still support moving and jumping with separate fingers. Help, maps, and settings remain scrollable.
 
 **How to play** opens a scrollable popup from the footer or Settings. It pauses a running game and resumes it on close. Escape, the close button, or **Got it!** dismiss it; opening it from an already paused or ready screen preserves that state.
 
