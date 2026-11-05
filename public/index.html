@@ -4,7 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#171526">
-<meta name="description" content="A big little platform adventure. Explore five magical worlds with your buddies, find treasures, and bring your friends home.">
+<meta name="description" content="Explore five magical lands, find secret coin rooms, and create your own character in Super Emilia World. Designed with ❤️ in Smyrna by Emilia.">
+<link rel="canonical" href="https://superemilia.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Super Emilia World">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://superemilia.com/">
+<meta property="og:title" content="Super Emilia World">
+<meta property="og:description" content="Five magical lands. Secret coin rooms. Your own little hero. A buddy adventure designed with ❤️ by Emilia.">
+<meta property="og:image" content="https://superemilia.com/assets/super-emilia-world-og-v1.png">
+<meta property="og:image:secure_url" content="https://superemilia.com/assets/super-emilia-world-og-v1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1717">
+<meta property="og:image:height" content="916">
+<meta property="og:image:alt" content="Super Emilia World: Emilia and her chick, kitten, and butterfly buddies exploring five pastel floating lands.">
+<meta property="og:image" content="https://superemilia.com/assets/super-emilia-world-square-v1.png">
+<meta property="og:image:secure_url" content="https://superemilia.com/assets/super-emilia-world-square-v1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1254">
+<meta property="og:image:height" content="1254">
+<meta property="og:image:alt" content="Emilia, Pip, Mochi and Luna in a colorful Super Emilia World adventure.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Super Emilia World">
+<meta name="twitter:description" content="Explore five magical lands, find secret coin rooms, and create your own little hero.">
+<meta name="twitter:image" content="https://superemilia.com/assets/super-emilia-world-og-v1.png">
+<meta name="twitter:image:alt" content="Emilia and her buddies in the five colorful lands of Super Emilia World.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <title>Super Emilia World · Buddy Adventures</title>
 <style>
 :root{color-scheme:dark;--bg:#171526;--panel:#242035;--line:#41394f;--mint:#b9efd4;--muted:#b5aec7;--gold:#ffdb86;--ink:#faf5ff}
@@ -35,7 +60,7 @@
     <div class="overlay" id="overlay"><div class="intro"><div class="little" id="overlayEyebrow">Five worlds. One happy adventure.</div><div class="friends" id="overlayFriends" aria-hidden="true">🐥 ✦ 🐱</div><h2 id="overlayTitle">A big little<br>adventure.</h2><p id="overlayText">Run, hop, and bounce through magical worlds.<br>Find surprise blocks and bring your friends home.</p><button class="primary" id="start">Let’s adventure →</button><p class="note" id="overlayNote">Double jumps · Helpful buddies · Unlimited tries</p></div></div>
   </div>
   <div class="bottom-bar"><div class="movement"><button class="touch-button" data-hold="ArrowLeft" aria-label="Move left">←</button><button class="touch-button" data-hold="ArrowRight" aria-label="Move right">→</button><button id="run" aria-pressed="false" aria-label="Toggle running">Run</button><button id="pipe" class="touch-button" data-hold="ArrowDown" aria-label="Enter a pipe">↓</button></div><div class="control-help"><kbd>←</kbd> <kbd>→</kbd> move &nbsp; <kbd>Space</kbd> jump twice &nbsp; <kbd>Shift</kbd> run &nbsp; <kbd>↓</kbd> explore &nbsp; <kbd>E</kbd> power</div><div class="action-buttons"><button id="ability" class="touch-button">Moon float ✨</button><button id="jump" class="touch-button" data-hold="Space">Jump ↑</button></div></div>
-  <footer><details><summary>How to play</summary><p>Move with ← → or A / D. Hold Shift or Run for a running start. Hold your jump for extra height; jump again in the air. Land on little grumps to bounce off them. Hit glowing ? blocks from below for stars and power-ups. Some ordinary-looking openings hide coin games. Stand on one and press ↓ or S to explore. Earn hidden gems in bonus rooms, reach a checkpoint flag, and rescue the friend at the big finish flag. E uses your world power. P pauses. You always have unlimited tries.</p></details><span class="credit">Designed with &lt;3 in Smyrna by Emilia</span></footer>
+  <footer><details><summary>How to play</summary><p>Move with ← → or A / D. Hold Shift or Run for a running start. Hold your jump for extra height; jump again in the air. Land on little grumps to bounce off them. Hit glowing ? blocks from below for stars and power-ups. Some ordinary-looking openings hide coin games. Stand on one and press ↓ or S to explore. Earn hidden gems in bonus rooms, reach a checkpoint flag, and rescue the friend at the big finish flag. E uses your world power. P pauses. You always have unlimited tries.</p></details><span class="credit">Designed with ❤️ in Smyrna by Emilia</span></footer>
   <span id="status" role="status" aria-live="polite"></span>
 </main>
 <div class="scrim" id="scrim" hidden></div>
@@ -59,7 +84,7 @@ function save(){try{localStorage.setItem('laserLeapRewards',JSON.stringify({bank
 let pipes=[],coins=[],bonus=null,returnScene=null,pipeTransition=null,stageCoins=0;
 let solids=[],ledges=[],blocks=[],enemies=[],hazards=[],stars=[],gems=[],items=[],checkpoints=[],particles=[],floaters=[],signs=[],springs=[],worldWidth=0,goalX=0;
 const p={x:75,y:450,w:34,h:46,vx:0,vy:0,face:1,grounded:false,jumps:0,coyote:0,buffer:0,hp:3,inv:0,power:0,cooldown:0,star:0,boots:0,shield:0,squash:0,ground:null};
-let camera=0,time=0,anim=0,state='ready',spawn={x:75,y:GROUND-46},stageStars=0,stageGems=0,stomps=0,toastTime=0,screenShake=0,checkpointIndex=-1,menuWasPlaying=false,lastNow=0,accumulator=0,finishBonus=0,audio;
+let camera=0,cameraY=0,time=0,anim=0,state='ready',spawn={x:75,y:GROUND-46},stageStars=0,stageGems=0,stomps=0,toastTime=0,screenShake=0,checkpointIndex=-1,menuWasPlaying=false,lastNow=0,accumulator=0,finishBonus=0,audio;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
 function tone(freq=600,length=.1,type='sine',volume=.035){if(!sound)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();const o=audio.createOscillator(),a=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,audio.currentTime);o.frequency.exponentialRampToValueAtTime(freq*1.16,audio.currentTime+length);a.gain.setValueAtTime(volume,audio.currentTime);a.gain.exponentialRampToValueAtTime(.001,audio.currentTime+length);o.connect(a);a.connect(audio.destination);o.start();o.stop(audio.currentTime+length)}catch{}}
 function chime(){[523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,.18),i*85))}
@@ -70,7 +95,7 @@ function addStars(x,y,n=5){for(let j=0;j<n;j++)stars.push({x:x+j*34,y:y-Math.sin
 function makeLevel(){
  bonus=null;returnScene=null;pipeTransition=null;pipes=[];coins=[];stageCoins=0;
  solids=[];ledges=[];blocks=[];enemies=[];hazards=[];stars=[];gems=[];items=[];checkpoints=[];particles=[];floaters=[];signs=[];springs=[];
- stageStars=0;stageGems=0;stomps=0;checkpointIndex=-1;finishBonus=0;time=0;camera=0;
+ stageStars=0;stageGems=0;stomps=0;checkpointIndex=-1;finishBonus=0;time=0;camera=0;cameraY=0;
  const segments=10+(level>5?1:0),secretSegments=[1+level%2,4+(Math.floor(level/2)%2),7+(Math.floor(level/4)%2)];let x=0;
  for(let i=0;i<segments;i++){
    const first=i===0,last=i===segments-1,w=first?760:last?730:440+((i*71+level*37)%150),y=first||last?GROUND:GROUND-[0,24,0,40,12,0][(i+level)%6];
@@ -79,7 +104,7 @@ function makeLevel(){
    else if(!last){
      addStars(x+55,y-55,4);
      const columnAt=x+240+((i*13+level*19)%60),height=48+((i+level)%3)*15;
-     const slot=secretSegments.indexOf(i);if(i%3!==1||slot>=0){const pipe={x:columnAt,y:y-height,w:72,h:height,kind:'pipe',secret:slot>=0,slot,type:(level+Math.max(slot,0))%3,used:false};solids.push(pipe);pipes.push(pipe);if(slot>=0)gems.push({x:pipe.x+36,y:pipe.y-30,pipeId:slot,hidden:true,got:false});}if(i%2===1)ledges.push({x:x+w-165,y:y-118,w:105,h:18,kind:'ledge'});
+     const slot=secretSegments.indexOf(i);if(i%3!==1||slot>=0){const pipe={x:columnAt,y:y-height,w:72,h:height,kind:'pipe',secret:slot>=0,slot,type:(level+Math.max(slot,0)+3)%4,used:false};solids.push(pipe);pipes.push(pipe);if(slot>=0)gems.push({x:pipe.x+36,y:pipe.y-30,pipeId:slot,hidden:true,got:false});}if(i%2===1)ledges.push({x:x+w-165,y:y-118,w:105,h:18,kind:'ledge'});
      const rowX=x+138,rowY=y-152-((level+i)%2)*16;
      for(let j=0;j<3;j++)blocks.push({x:rowX+j*42,y:rowY,w:42,h:42,kind:j===1?'question':'brick',used:false,content:j===1?['stars','star','heart','boots'][(i+level)%4]:'stars',bump:0});
      enemies.push({x:x+80,y:y-28,w:34,h:28,vx:(i%2?1:-1)*(40+level*2),min:x+28,max:x+206,alive:true,squash:0});
@@ -97,7 +122,7 @@ function makeLevel(){
 }
 function respawn(message=true){Object.assign(p,{x:spawn.x,y:spawn.y,vx:0,vy:0,jumps:0,grounded:false,ground:null,coyote:0,buffer:0,inv:2,hp:3,power:0,squash:0});camera=clamp(p.x-W*.3,0,Math.max(0,worldWidth-W));if(message)notify('Back to your flag. Let’s try again! ✦')}
 function updateUI(){const th=themes[theme];$('#theme').value=theme;$('#mode').value=mode;$('#worldLabel').textContent=th.icon+' '+th.names[level];$('#worldHud').textContent=th.name.toUpperCase()+' · '+String(level+1).padStart(2,'0')+' / 12';$('#stageName').textContent=th.names[level];$('#worldDescription').textContent=th.description;$('#sound').textContent='Sound: '+(sound?'on':'off');$('#outfit').textContent='Hat: '+['none','🎀','🎩','👑'][hat];$('#stats').textContent='✦ '+bank+' wardrobe stars · '+coinBank+' coins · '+rescues+' friends rescued';document.querySelectorAll('[data-buddy]').forEach(b=>{b.classList.toggle('selected',Number(b.dataset.buddy)===buddy);b.setAttribute('aria-pressed',Number(b.dataset.buddy)===buddy?'true':'false')});hud();}
-function hud(){const hearts='♥'.repeat(p.hp)+'♡'.repeat(3-p.hp);$('#hearts').textContent=hearts;$('#stars').textContent=bonus?'● '+bonus.collected+' / '+bonus.target:'✦ '+stageStars+' · ● '+stageCoins;$('#treasure').textContent=bonus?'⏱ '+Math.ceil(bonus.remaining)+'s':(stageGems===3?'◆ ':'◇ ')+stageGems+' / 3';$('#worldHud').textContent=bonus?'SECRET HIDEAWAY':themes[theme].name.toUpperCase()+' · '+String(level+1).padStart(2,'0')+' / 12';$('#stageName').textContent=bonus?bonus.name:themes[theme].names[level];$('#ability').textContent=p.cooldown>0?'Power '+Math.ceil(p.cooldown)+'s':themes[theme].power+' ✨';$('#ability').disabled=p.cooldown>0||state!=='playing'||Boolean(pipeTransition);$('#progress').style.width=(bonus?clamp(bonus.collected/bonus.target*100,0,100):clamp(p.x/(goalX||1)*100,0,100))+'%';$('#pause').setAttribute('data-icon',state==='playing'?'Ⅱ':'▶');}
+function hud(){const hearts='♥'.repeat(p.hp)+'♡'.repeat(3-p.hp);$('#hearts').textContent=hearts;$('#stars').textContent=bonus?'● '+bonus.collected+(bonus.type===3?'':' / '+bonus.target):'✦ '+stageStars+' · ● '+stageCoins;$('#treasure').textContent=bonus?(bonus.type===3?'Tier '+Math.min(5,bonus.activeTier+1)+' / 5':'⏱ '+Math.ceil(bonus.remaining)+'s'):(stageGems===3?'◆ ':'◇ ')+stageGems+' / 3';$('#worldHud').textContent=bonus?'SECRET HIDEAWAY':themes[theme].name.toUpperCase()+' · '+String(level+1).padStart(2,'0')+' / 12';$('#stageName').textContent=bonus?bonus.name:themes[theme].names[level];$('#ability').textContent=p.cooldown>0?'Power '+Math.ceil(p.cooldown)+'s':themes[theme].power+' ✨';$('#ability').disabled=p.cooldown>0||state!=='playing'||Boolean(pipeTransition);$('#progress').style.width=(bonus?(bonus.type===3?bonus.activeTier/5*100:clamp(bonus.collected/bonus.target*100,0,100)):clamp(p.x/(goalX||1)*100,0,100))+'%';$('#pause').setAttribute('data-icon',state==='playing'?'Ⅱ':'▶');}
 function showOverlay(kind){const th=themes[theme];$('#overlay').hidden=false;$('#pause').textContent='▶ Resume';$('#pause').setAttribute('aria-label','Resume game');if(kind==='paused'){$('#overlayEyebrow').textContent='Take your time';$('#overlayFriends').textContent=['','🐥','🐱','🦋'][buddy]+' ✦';$('#overlayTitle').innerHTML='A little breather.';$('#overlayText').textContent='Your adventure will be right here.';$('#start').textContent='Keep exploring →';$('#overlayNote').textContent='P to resume · Settings to change worlds'}else if(kind==='complete'||kind==='worldComplete'){const final=kind==='worldComplete';$('#overlayEyebrow').textContent=final?'12 adventures. So many happy friends.':'Stage '+(level+1)+' complete';$('#overlayFriends').textContent=['🐰','🦊','🧸'][level%3]+' ✦ '+['','🐥','🐱','🦋'][buddy];$('#overlayTitle').innerHTML=final?'You’re a<br>starlight superstar!':'A friend found!';$('#overlayText').textContent=stageStars+' stars · '+stageCoins+' coins · '+stageGems+'/3 hidden gems · '+stomps+' grumps bounced. '+(final?'Choose a new world and keep exploring!':'Next stop: '+th.names[level+1]+'.');$('#start').textContent=final?'Explore the next world →':'Next adventure →';$('#overlayNote').textContent='+'+finishBonus+' celebration stars added to your wardrobe'}else{$('#overlayEyebrow').textContent=th.icon+' '+th.name+' · Stage '+(level+1);$('#overlayFriends').textContent=['','🐥','🐱','🦋'][buddy]+' ✦ '+['🐰','🦊','🧸'][level%3];$('#overlayTitle').innerHTML='A big little<br>adventure.';$('#overlayText').textContent='Run, hop, and bounce through '+th.names[level]+'. Find surprise blocks, hidden gems, and a friend to bring home.';$('#start').textContent='Let’s adventure →';$('#overlayNote').textContent='Double jumps · Helpful buddies · Unlimited tries'}}
 function start(){setMenu(false);if(state==='bonusComplete'){returnToLevel();return}if(state==='complete'){level++;save();makeLevel()}else if(state==='worldComplete'){theme=Object.keys(themes)[(Object.keys(themes).indexOf(theme)+1)%5];level=0;save();makeLevel()}state='playing';$('#overlay').hidden=true;$('#pause').textContent='Ⅱ Pause';$('#pause').setAttribute('aria-label','Pause game');clearKeys();c.focus();hud();tone(520,.1)}
 function pause(){if(state==='playing'){state='paused';clearKeys();showOverlay('paused')}else if(state==='paused'||state==='ready')start()}
@@ -108,7 +133,7 @@ function pressed(code){if(state!=='playing'||pipeTransition)return;if(['ArrowDow
 function released(code){delete keys[code];if(['Space','ArrowUp','KeyW'].includes(code)&&p.vy< -270)p.vy=-270}
 function ability(){if(state!=='playing'||pipeTransition||p.cooldown>0)return;p.cooldown=8;p.power=3;if(['candy','forest','home'].includes(theme)){p.vy=-850;p.grounded=false;p.jumps=1;p.coyote=0;burst(p.x+17,p.y+p.h,themes[theme].edge)}tone(760,.16);notify(themes[theme].power+'! ✨')}
 function collectStar(x,y,n=1){stageStars+=n;bank+=n;burst(x,y,'#ffe49b',6);tone(820+n*35,.07);save()}
-function bumpBlock(b){if(b.used)return;b.bump=.22;if(b.kind==='brick'){b.used=true;b.broken=true;burst(b.x+21,b.y+21,themes[theme].tile,10);tone(180,.08,'triangle');stageStars++;bank++;save();return}b.used=true;tone(460,.1,'triangle');if(b.content==='stars'){collectStar(b.x+21,b.y-18,3);floatText(b.x,b.y-14,'+3 ✦')}else{items.push({x:b.x+7,y:b.y-33,w:28,h:28,vx:70,vy:-70,type:b.content,life:18});floatText(b.x-5,b.y-42,{shield:'Bubble shield',star:'Star sparkle',heart:'A little love',boots:'Zoom boots'}[b.content])}for(const e of enemies)if(e.alive&&Math.abs(e.y+e.h-b.y)<8&&e.x+e.w>b.x&&e.x<b.x+b.w)stomp(e)}
+function bumpBlock(b){if(b.kind==='lucky'){pickLuckyBlock(b);return}if(b.used)return;b.bump=.22;if(b.kind==='brick'){b.used=true;b.broken=true;burst(b.x+21,b.y+21,themes[theme].tile,10);tone(180,.08,'triangle');stageStars++;bank++;save();return}b.used=true;tone(460,.1,'triangle');if(b.content==='stars'){collectStar(b.x+21,b.y-18,3);floatText(b.x,b.y-14,'+3 ✦')}else{items.push({x:b.x+7,y:b.y-33,w:28,h:28,vx:70,vy:-70,type:b.content,life:18});floatText(b.x-5,b.y-42,{shield:'Bubble shield',star:'Star sparkle',heart:'A little love',boots:'Zoom boots'}[b.content])}for(const e of enemies)if(e.alive&&Math.abs(e.y+e.h-b.y)<8&&e.x+e.w>b.x&&e.x<b.x+b.w)stomp(e)}
 function stomp(e){e.alive=false;e.squash=.3;stomps++;collectStar(e.x+17,e.y,1);floatText(e.x,e.y-12,'Boing!');burst(e.x+17,e.y+10,themes[theme].edge,8);tone(260,.08,'triangle')}
 function damage(fromX){if(p.inv>0||p.star>0||p.shield>0||(p.power>0&&theme==='squishy')){if(p.shield>0&&p.inv<=0){p.shield=0;p.inv=1;notify('Your bubble kept you safe!')}return}p.hp--;p.inv=1.8;p.vx=(p.x<fromX?-1:1)*230;p.vy=-320;p.grounded=false;screenShake=.2;burst(p.x+17,p.y+20,'#ffb2c6',8);tone(150,.15,'triangle');if(p.hp<=0)respawn();else notify('You’ve got this! ♥')}
 function active(h){return (time+h.phase)%4<(mode==='gentle'?1.15:2.25)}
@@ -123,11 +148,11 @@ function physics(dt){
  const direction=(keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0),speed=p.boots>0?465:(keys.ShiftLeft||keys.ShiftRight||runLatched?385:265),target=direction*speed,accel=direction?2100:2700;
  p.vx+=clamp(target-p.vx,-accel*dt,accel*dt);if(direction)p.face=direction;
  if(p.buffer>0&&(p.coyote>0||p.grounded||p.jumps<2)){const groundJump=p.grounded||p.coyote>0;p.jumps=groundJump?1:p.jumps+1;p.vy=groundJump?-650:-610;p.buffer=0;p.coyote=0;p.grounded=false;p.squash=.16;tone(groundJump?390:550,.08);burst(p.x+17,p.y+p.h,themes[theme].edge,5)}
- const colliders=solids.concat(blocks.filter(b=>!b.broken));p.x+=p.vx*dt;
+ const colliders=solids.concat(blocks.filter(b=>!b.broken&&(!bonus||bonus.type!==3||b.bonusTier<=bonus.activeTier)));p.x+=p.vx*dt;
  for(const a of colliders)if(overlap(p,a)){if(p.vx>0)p.x=a.x-p.w;else if(p.vx<0)p.x=a.x+a.w;p.vx=0}
  p.x=clamp(p.x,0,worldWidth-p.w);const oldY=p.y,oldBottom=p.y+p.h;const floated=p.power>0&&theme==='space';p.vy=Math.min(1000,p.vy+(floated?570:1800)*dt);if(floated&&p.vy>110)p.vy=110;p.y+=p.vy*dt;p.grounded=false;p.ground=null;
- for(const a of colliders){if(!overlap(p,a))continue;if(p.vy>=0&&oldBottom<=a.y+3){p.y=a.y-p.h;p.vy=0;p.grounded=true;p.ground=a;p.jumps=0;p.coyote=.12}else if(p.vy<0&&oldY>=a.y+a.h-3){p.y=a.y+a.h;p.vy=35;if(a.kind==='question'||a.kind==='brick')bumpBlock(a)}}
- for(const a of ledges)if(p.vy>=0&&oldBottom<=a.y+4&&p.y+p.h>=a.y&&p.x+p.w>a.x&&p.x<a.x+a.w){p.y=a.y-p.h;p.vy=0;p.grounded=true;p.ground=a;p.jumps=0;p.coyote=.12}
+ for(const a of colliders){if(!overlap(p,a))continue;if(p.vy>=0&&oldBottom<=a.y+3){p.y=a.y-p.h;p.vy=0;p.grounded=true;p.ground=a;p.jumps=0;p.coyote=.12}else if(p.vy<0&&oldY>=a.y+a.h-3){p.y=a.y+a.h;p.vy=35;if(a.kind==='question'||a.kind==='brick'||a.kind==='lucky')bumpBlock(a)}}
+ for(const a of ledges)if((!bonus||bonus.type!==3||a.requiresTier<=bonus.activeTier)&&p.vy>=0&&oldBottom<=a.y+4&&p.y+p.h>=a.y&&p.x+p.w>a.x&&p.x<a.x+a.w){p.y=a.y-p.h;p.vy=0;p.grounded=true;p.ground=a;p.jumps=0;p.coyote=.12}
  for(const a of springs){a.squash=Math.max(0,a.squash-dt);if(p.vy>=0&&oldBottom<=a.y+12&&overlap(p,a)){p.y=a.y-p.h;p.vy=-900;p.jumps=1;p.grounded=false;p.coyote=0;a.squash=.3;burst(a.x+21,a.y,themes[theme].edge);tone(310,.15,'triangle');notify('A little extra bounce! ↑')}}
  if(!p.grounded&&p.coyote<=0&&p.jumps===0)p.jumps=1;
  for(const e of enemies){e.squash=Math.max(0,e.squash-dt);if(!e.alive)continue;e.x+=e.vx*dt*(mode==='gentle'?.8:1);if(e.x<e.min){e.x=e.min;e.vx=Math.abs(e.vx)}if(e.x+e.w>e.max){e.x=e.max-e.w;e.vx=-Math.abs(e.vx)}if(overlap(p,e)){if(p.star>0){stomp(e)}else if(p.vy>0&&oldBottom<e.y+17){stomp(e);p.y=e.y-p.h;p.vy=keys.Space||keys.ArrowUp||keys.KeyW?-640:-470;p.jumps=1;p.grounded=false}else damage(e.x+17)}}
@@ -136,8 +161,8 @@ function physics(dt){
  for(const a of gems)if(!a.hidden&&!a.got&&Math.hypot(p.x+17-a.x,p.y+23-a.y)<34){a.got=true;stageGems++;bank+=5;save();burst(a.x,a.y,'#c6ffeb',20);floatText(a.x-20,a.y-15,'+5 ✦');chime();notify('Hidden gem '+stageGems+' / 3! Your buddy is proud. ◆')}
  for(const a of items){if(a.life<=0)continue;a.life-=dt;const before=a.y+a.h;a.x+=a.vx*dt;a.vy=Math.min(700,a.vy+1500*dt);a.y+=a.vy*dt;for(const b of colliders.concat(ledges))if(a.vy>=0&&before<=b.y+3&&overlap(a,b)){a.y=b.y-a.h;a.vy=0}if(overlap(p,a)){a.life=0;if(a.type==='star'){p.star=8;notify('Star sparkle! You’re unstoppable for 8 seconds. ✦')}else if(a.type==='heart'){p.hp=3;notify('Three happy hearts! ♥')}else if(a.type==='boots'){p.boots=10;notify('Zoom boots! Faster feet for 10 seconds.')}else{p.shield=20;notify('Bubble shield! A little extra protection.')}burst(a.x,a.y,'#fff0aa',16);chime()}}
  for(let i=0;i<checkpoints.length;i++){const a=checkpoints[i];if(!a.active&&Math.abs(p.x-a.x)<54&&p.grounded&&Math.abs(p.y+p.h-(a.y+a.h))<12){a.active=true;checkpointIndex=i;spawn={x:a.spawnX,y:a.spawnY};p.hp=3;burst(a.x+12,a.y+20,'#b9efd4',18);tone(690,.18);notify('Checkpoint! Your next try starts here. ⚑')}}
- if(p.y>H+120){if(bonus){Object.assign(p,{x:80,y:GROUND-p.h,vx:0,vy:0,jumps:0,grounded:false,ground:null});}else respawn();return}if(bonus){updateBonus(dt);if(state!=='playing')return}else if(p.x+p.w>goalX&&p.grounded)finish();
- camera+=(clamp(p.x-W*.33,0,Math.max(0,worldWidth-W))-camera)*Math.min(1,dt*7);
+ if(p.y>H+120){if(bonus){Object.assign(p,{x:80,y:GROUND-p.h,vx:0,vy:0,jumps:0,grounded:false,ground:null});cameraY=0;}else respawn();return}if(bonus){updateBonus(dt);if(state!=='playing')return}else if(p.x+p.w>goalX&&p.grounded)finish();
+ camera+=(clamp(p.x-W*.33,0,Math.max(0,worldWidth-W))-camera)*Math.min(1,dt*7);cameraY=bonus?.type===3?cameraY+(Math.min(0,p.y-H*.48)-cameraY)*Math.min(1,dt*7):0;
 }
 function updateEffects(dt){anim+=dt;screenShake=Math.max(0,screenShake-dt);if(toastTime>0){toastTime-=dt;if(toastTime<=0)$('#toast').classList.remove('show')}for(const a of particles){a.life-=dt;a.x+=a.vx*dt;a.y+=a.vy*dt;a.vy+=440*dt}particles=particles.filter(a=>a.life>0);for(const a of floaters){a.life-=dt;a.y-=30*dt}floaters=floaters.filter(a=>a.life>0)}
 // Drawing uses original, code-native illustrations so every world stays crisp at any size.
@@ -171,7 +196,7 @@ function drawGround(a,th){if(a.kind==='pipe'){drawPipe(a,th);return}if(a.kind===
  round(a.x,a.y,a.w,15,[8,8,0,0],th.edge);if(theme==='candy'||theme==='squishy'){for(let x=a.x+12;x<a.x+a.w-10;x+=27)ellipse(x,a.y+13,9,8,th.edge)}else if(theme==='forest'){g.strokeStyle=th.edge;g.lineWidth=3;for(let x=a.x+8;x<a.x+a.w;x+=18){g.beginPath();g.moveTo(x,a.y+2);g.lineTo(x-3,a.y-5);g.stroke()}}else if(theme==='space'){for(let x=a.x+25;x<a.x+a.w;x+=50)ellipse(x,a.y+7,2.5,2.5,'#effff3')}
 }
 function drawLedge(a,th){round(a.x,a.y,a.w,a.h,7,th.dirt,th.dirt2);round(a.x,a.y,a.w,6,[6,6,0,0],a.kind==='moving'?'#f9dfac':th.edge);if(a.kind==='moving'){text('↔',a.x+a.w/2,a.y+14,11,th.dirt2,'center');ellipse(a.x+12,a.y+a.h+7,5,3,'#ffffff33');ellipse(a.x+a.w-12,a.y+a.h+7,5,3,'#ffffff33')}}
-function drawBlock(b,th){if(b.broken)return;const y=b.y-Math.sin(b.bump/.22*Math.PI)*10;round(b.x,y,b.w,b.h,6,b.used?th.dirt:b.kind==='question'?'#ffd48a':th.tile,b.kind==='question'?'#a97860':th.dirt2);if(b.kind==='question'){if(!b.used){round(b.x+5,y+5,b.w-10,4,2,'#ffeab9');text('?',b.x+21,y+31,28,'#785447','center','800')}else{ellipse(b.x+21,y+21,3,3,th.tile)}}else{g.strokeStyle=th.dirt2;g.lineWidth=2;g.beginPath();g.moveTo(b.x,y+21);g.lineTo(b.x+42,y+21);g.moveTo(b.x+21,y);g.lineTo(b.x+21,y+21);g.moveTo(b.x+10,y+21);g.lineTo(b.x+10,y+42);g.moveTo(b.x+32,y+21);g.lineTo(b.x+32,y+42);g.stroke()}}
+function drawBlock(b,th){if(b.kind==='lucky'){drawLuckyBlock(b,th);return}if(b.broken)return;const y=b.y-Math.sin(b.bump/.22*Math.PI)*10;round(b.x,y,b.w,b.h,6,b.used?th.dirt:b.kind==='question'?'#ffd48a':th.tile,b.kind==='question'?'#a97860':th.dirt2);if(b.kind==='question'){if(!b.used){round(b.x+5,y+5,b.w-10,4,2,'#ffeab9');text('?',b.x+21,y+31,28,'#785447','center','800')}else{ellipse(b.x+21,y+21,3,3,th.tile)}}else{g.strokeStyle=th.dirt2;g.lineWidth=2;g.beginPath();g.moveTo(b.x,y+21);g.lineTo(b.x+42,y+21);g.moveTo(b.x+21,y);g.lineTo(b.x+21,y+21);g.moveTo(b.x+10,y+21);g.lineTo(b.x+10,y+42);g.moveTo(b.x+32,y+21);g.lineTo(b.x+32,y+42);g.stroke()}}
 function drawHazard(h,th){const b=hazardBounds(h),on=active(h),warn=(time+h.phase)%4>3.4;g.save();g.globalAlpha=on?1:warn?.7:.3;if(theme==='space'){
  round(h.x-9,h.y-10,30,12,4,'#b1a1c5','#473951');round(h.x-9,h.y+h.h-2,30,10,3,'#b1a1c5','#473951');if(on){g.shadowColor='#ff8eae';g.shadowBlur=15}round(h.x+(on?0:4),h.y,on?12:4,h.h,4,on?'#ff95bb':'#e0b6da');if(on)round(h.x+4,h.y,4,h.h,2,'#ffe5ee');
  }else if(theme==='candy'){round(b.x,b.y,b.w,b.h,[9,9,3,3],'#fff3dc','#ce779e');g.save();g.beginPath();g.rect(b.x,b.y,b.w,b.h);g.clip();g.strokeStyle='#eb79a7';g.lineWidth=7;for(let y=b.y-15;y<b.y+b.h;y+=21){g.beginPath();g.moveTo(b.x,y);g.lineTo(b.x+b.w,y+17);g.stroke()}g.restore()}
@@ -182,8 +207,8 @@ function drawEnemy(e,th){if(!e.alive&&!e.squash)return;g.save();if(!e.alive){g.t
 function drawBuddy(th){const key=['','pip','mochi','luna'][buddy];if(key)drawBuddyLook(g,p.x-p.face*37,p.y+16+Math.sin(anim*4)*5,key,looks[key],anim,1,p.face)}
 function drawHero(th){drawBuddy(th);g.save();if(p.inv>0&&Math.floor(p.inv*12)%2)g.globalAlpha=.45;if(p.star>0){g.shadowColor=['#ffbfdb','#ffe796','#b9efd4'][Math.floor(anim*8)%3];g.shadowBlur=24}drawHeroLook(g,p.x+17,p.y+23+(p.grounded?Math.sin(anim*3):0),looks.hero,th,anim,Math.abs(p.vx)>20&&p.grounded,p.face,hat);g.restore();if(p.shield>0||(p.power>0&&theme==='squishy')){g.strokeStyle='#c6fff0';g.lineWidth=2;g.beginPath();g.ellipse(p.x+17,p.y+21,30,37,0,0,7);g.stroke();ellipse(p.x+1,p.y-2,6,4,'#ffffff66')}if(p.power>0&&theme==='space')for(let i=0;i<3;i++)starShape(p.x+Math.sin(anim*2+i*2)*30+17,p.y+30+Math.cos(anim*2+i*2)*25,4,'#ffe8b4',4)}
 function drawFlag(a,th,finish=false){const height=finish?205:92;round(a.x,a.y,5,height,2,'#f5e5ce');ellipse(a.x+2.5,a.y-3,6,6,'#ffe18e');const flutter=Math.sin(anim*3)*4;g.fillStyle=finish||a.active?th.edge:'#aba0c2';g.beginPath();g.moveTo(a.x+5,a.y+5);g.lineTo(a.x+(finish?69:43),a.y+10+flutter);g.lineTo(a.x+(finish?57:35),a.y+(finish?48:31)+flutter);g.lineTo(a.x+5,a.y+(finish?44:30));g.closePath();g.fill();if(finish)starShape(a.x+28,a.y+26,11,'#697273');round(a.x-13,a.y+height,31,8,3,th.dirt2)}
-function render(){const th=themes[theme];g.clearRect(0,0,W,H);scenery(th);if(bonus)drawBonusBackdrop(th);g.save();g.translate(-Math.round(camera)+(screenShake?Math.sin(anim*120)*3:0),screenShake?Math.cos(anim*130)*2:0);const visible=a=>a.x+a.w>camera-80&&a.x<camera+W+80;
- for(const a of solids)if(visible(a))drawGround(a,th);for(const a of ledges)if(visible(a))drawLedge(a,th);for(const b of blocks)if(visible(b))drawBlock(b,th);
+function render(){const th=themes[theme];g.clearRect(0,0,W,H);scenery(th);if(bonus)drawBonusBackdrop(th);g.save();g.translate(-Math.round(camera)+(screenShake?Math.sin(anim*120)*3:0),-cameraY+(screenShake?Math.cos(anim*130)*2:0));const visible=a=>a.x+a.w>camera-80&&a.x<camera+W+80;
+ for(const a of solids)if(visible(a))drawGround(a,th);for(const a of ledges)if(visible(a)){g.save();if(bonus?.type===3&&a.requiresTier>bonus.activeTier)g.globalAlpha=.25;drawLedge(a,th);g.restore()}for(const b of blocks)if(visible(b))drawBlock(b,th);
  for(const a of signs)if(a.x>camera-120&&a.x<camera+W+120){round(a.x+20,a.y+15,6,42,2,th.dirt2);round(a.x-15,a.y-10,a.type==='start'?170:90,36,6,th.edge,th.dirt2);text('Adventure this way →',a.x+(a.type==='start'?70:30),a.y+13,a.type==='start'?13:11,th.dirt2,'center');}
  for(const a of springs)if(visible(a)){const h=a.squash>0?14:a.h;round(a.x,a.y+a.h-h,a.w,h,6,theme==='home'?'#d5b1b9':theme==='candy'?'#fff0d8':'#d0bbea',th.dirt2);g.strokeStyle=th.dirt2;g.lineWidth=2;g.beginPath();g.moveTo(a.x+8,a.y+a.h-5);g.lineTo(a.x+17,a.y+a.h-h+6);g.lineTo(a.x+25,a.y+a.h-5);g.lineTo(a.x+34,a.y+a.h-h+6);g.stroke()}
  for(const h of hazards)if(visible(h))drawHazard(h,th);for(const e of enemies)if(visible(e))drawEnemy(e,th);
@@ -195,10 +220,11 @@ function render(){const th=themes[theme];g.clearRect(0,0,W,H);scenery(th);if(bon
  if(p.star>0||p.boots>0||p.shield>0){const label=p.star>0?'✦ STAR SPARKLE':p.boots>0?'↠ ZOOM BOOTS':'◉ BUBBLE SHIELD';round(W/2-95,20,190,30,10,'#2d2545d9');text(label,W/2,40,11,'#ffdf9c','center')}
 }
 const bonusNames={space:['The Moon Coin Vault','Stardust Shower','Comet Bounce'],candy:['The Sugar Coin Vault','Sprinkle Shower','Marshmallow Bounce'],forest:['The Acorn Coin Vault','Golden Leaf Shower','Mushroom Bounce'],squishy:['The Jelly Coin Vault','Bubble Coin Shower','The Wobble Bounce'],home:['The Secret Piggy Bank','Pocket Money Shower','Pillow Bounce']};
+for(const [key,name] of Object.entries({space:'Moon Mystery Ladder',candy:'The Sugar Shuffle',forest:'The Lucky Log Ladder',squishy:'The Jelly Jackpot',home:'The Piggy Bank Puzzle'}))bonusNames[key].push(name);
 function standingPipe(){return p.grounded?pipes.find(a=>Math.abs(p.y+p.h-a.y)<4&&Math.abs(p.x+p.w/2-(a.x+a.w/2))<a.w/2-11):null}
 function tryPipe(){
  const pipe=standingPipe();if(!pipe||pipeTransition||state!=='playing')return;
- if(bonus){finishBonusRoom(true);return}
+ if(bonus){if(bonus.type===3&&!bonus.gameCleared){notify('Explore all five tiers, then use the top pipe.');return}finishBonusRoom(true);return}
  if(!pipe.secret){tone(170,.08);notify('Just a sleepy little pipe.');return}
  if(pipe.used){notify('You’ve explored this hideaway.');return}
  pipeTransition={pipe,elapsed:0,fromY:p.y};clearKeys();tone(280,.25,'triangle');
@@ -206,15 +232,15 @@ function tryPipe(){
 function updatePipeTransition(dt){const a=pipeTransition;a.elapsed+=dt;p.vx=0;p.vy=0;p.x=a.pipe.x+a.pipe.w/2-p.w/2;p.y=a.fromY+Math.min(1,a.elapsed/.55)*(p.h+12);if(a.elapsed>=.6){pipeTransition=null;enterBonus(a.pipe)}}
 function enterBonus(pipe){
  pipe.used=true;
- returnScene={solids,ledges,blocks,enemies,hazards,stars,gems,items,checkpoints,particles,floaters,signs,springs,pipes,coins,worldWidth,goalX,spawn:{...spawn},camera,time,checkpointIndex,player:{...p,x:pipe.x+pipe.w/2-p.w/2,y:pipe.y-p.h-2,vx:0,vy:0},pipe};
+ returnScene={solids,ledges,blocks,enemies,hazards,stars,gems,items,checkpoints,particles,floaters,signs,springs,pipes,coins,worldWidth,goalX,spawn:{...spawn},camera,cameraY,time,checkpointIndex,player:{...p,x:pipe.x+pipe.w/2-p.w/2,y:pipe.y-p.h-2,vx:0,vy:0},pipe};
  solids=[];ledges=[];blocks=[];enemies=[];hazards=[];stars=[];gems=[];items=[];checkpoints=[];particles=[];floaters=[];signs=[];springs=[];pipes=[];coins=[];
- worldWidth=Math.max(1100,W);goalX=Infinity;camera=0;time=0;
+ worldWidth=Math.max(1100,W);goalX=Infinity;camera=0;cameraY=0;time=0;
  const type=pipe.type,duration=type===1?(mode==='gentle'?32:25):(mode==='gentle'?40:30);
  bonus={type,name:bonusNames[theme][type],remaining:duration,duration,collected:0,target:type===1?(mode==='gentle'?10:14):18,total:0,spawnClock:0,spawnCount:0,done:false,success:false,roomCoins:0};
  solids.push({x:0,y:GROUND,w:worldWidth,h:220,kind:'ground'});
  const exit={x:worldWidth-130,y:GROUND-65,w:72,h:65,kind:'pipe',exit:true};solids.push(exit);pipes.push(exit);
  const usable=worldWidth-300;
- if(type===1){
+ if(type===3){setupLuckyLadder(exit)}else if(type===1){
    bonus.total=60;
  }else{
    const xs=[165,165+usable*.3,165+usable*.61,165+usable*.8],ys=type===0?[425,360,425,330]:[408,325,242,350];
@@ -224,11 +250,11 @@ function enterBonus(pipe){
    if(type===2){for(const fraction of [.18,.48,.75])springs.push({x:worldWidth*fraction,y:GROUND-23,w:42,h:23,squash:0});}
  }
  spawn={x:65,y:GROUND-p.h};Object.assign(p,{x:65,y:GROUND-p.h,vx:0,vy:0,grounded:false,ground:null,jumps:0,coyote:0,buffer:0,power:0,cooldown:0,star:0,boots:0,shield:0,inv:1,hp:returnScene.player.hp});clearKeys();
- chime();notify(['A coin vault! Grab 18 coins before time runs out.','Catch the falling coins! Your buddy came too.','Bounce for coins! Find 18 before the timer ends.'][type]);hud();
+ chime();notify(['A coin vault! Grab 18 coins before time runs out.','Catch the falling coins! Your buddy came too.','Bounce for coins! Find 18 before the timer ends.','Five tiers, three mystery blocks each. Jump under a block to choose!'][type]);hud();
 }
-function collectCoin(coin){if(coin.got||!bonus||bonus.done)return;coin.got=true;bonus.collected++;bonus.roomCoins++;coinBank++;stageCoins++;burst(coin.x,coin.y,'#ffe19a',5);tone(940+bonus.collected%5*65,.055);save()}
+function collectCoin(coin,value=1){if(coin.got||!bonus||bonus.done)return;coin.got=true;bonus.collected+=value;bonus.roomCoins+=value;coinBank+=value;stageCoins+=value;burst(coin.x,coin.y,'#ffe19a',5);tone(940+bonus.collected%5*65,.055);save()}
 function updateBonus(dt){
- if(!bonus||bonus.done)return;bonus.remaining=Math.max(0,bonus.remaining-dt);
+ if(!bonus||bonus.done)return;if(bonus.type===3)return;bonus.remaining=Math.max(0,bonus.remaining-dt);
  if(bonus.type===1){
    bonus.spawnClock-=dt;
    if(bonus.spawnClock<=0&&bonus.remaining>3&&bonus.spawnCount<60){
@@ -240,19 +266,19 @@ function updateBonus(dt){
  if(bonus.remaining<=0||(bonus.type!==1&&coins.every(a=>a.got)))finishBonusRoom(false);
 }
 function finishBonusRoom(early){
- if(!bonus||bonus.done)return;bonus.done=true;bonus.success=bonus.collected>=bonus.target;bonus.early=early;
+ if(!bonus||bonus.done)return;bonus.done=true;bonus.success=bonus.type===3?bonus.correctRows>=bonus.target:bonus.collected>=bonus.target;bonus.early=early;
  const pipe=returnScene.pipe,key=theme+':'+level+':'+pipe.slot;
  const previous=secretRecords[key];secretRecords[key]={coins:Math.max(Number(previous?.coins??previous)||0,bonus.collected),gem:Boolean(previous?.gem||bonus.success)};
  if(bonus.success){
    const gem=returnScene.gems.find(a=>a.pipeId===pipe.slot);if(gem&&!gem.got){gem.got=true;stageGems++;stageStars+=5;bank+=5;}
    coinBank+=10;stageCoins+=10;bonus.roomCoins+=10;chime();
  }else tone(620,.15);
- save();state='bonusComplete';clearKeys();$('#overlay').hidden=false;$('#overlayEyebrow').textContent='A secret little hideaway';$('#overlayFriends').textContent=['','🐥','🐱','🦋'][buddy]+' ● ✦';$('#overlayTitle').innerHTML=bonus.success?'Pocket full<br>of coins!':'A lovely little haul.';$('#overlayText').textContent=bonus.collected+' coins collected. '+(bonus.success?'Hidden gem found, plus 10 extra coins and 5 wardrobe stars!':'Every coin is yours to keep. Find '+bonus.target+' next time for the hidden gem.');$('#start').textContent='Back to the adventure →';$('#overlayNote').textContent='+'+bonus.roomCoins+' coins saved · Your level is waiting right where you left it';hud();
+ save();state='bonusComplete';clearKeys();$('#overlay').hidden=false;$('#overlayEyebrow').textContent='A secret little hideaway';$('#overlayFriends').textContent=['','🐥','🐱','🦋'][buddy]+' ● ✦';$('#overlayTitle').innerHTML=bonus.success?'Pocket full<br>of coins!':'A lovely little haul.';$('#overlayText').textContent=(bonus.type===3?bonus.correctRows+' winning rows · ':'')+bonus.collected+' coins collected. '+(bonus.success?'Hidden gem found, plus 10 extra coins and 5 wardrobe stars!':'Every coin is yours to keep. Find '+bonus.target+(bonus.type===3?' winning rows':' coins')+' next time for the hidden gem.');$('#start').textContent='Back to the adventure →';$('#overlayNote').textContent='+'+bonus.roomCoins+' coins saved · Your level is waiting right where you left it';hud();
 }
 function returnToLevel(){
  if(!returnScene)return;
  const a=returnScene,earned=bonus?bonus.roomCoins:0;
- ({solids,ledges,blocks,enemies,hazards,stars,gems,items,checkpoints,particles,floaters,signs,springs,pipes,coins,worldWidth,goalX,spawn,camera,time,checkpointIndex}=a);
+ ({solids,ledges,blocks,enemies,hazards,stars,gems,items,checkpoints,particles,floaters,signs,springs,pipes,coins,worldWidth,goalX,spawn,camera,cameraY,time,checkpointIndex}=a);
  Object.assign(p,a.player,{vy:-170,vx:0,inv:1.5,grounded:false,ground:null,buffer:0,coyote:0,jumps:1});
  bonus=null;returnScene=null;pipeTransition=null;state='playing';clearKeys();$('#overlay').hidden=true;$('#pause').textContent='Ⅱ Pause';c.focus();notify('Back to the adventure! +'+earned+' coins ●');updateUI();
 }
@@ -266,13 +292,14 @@ function drawPipe(a,th){
  if(a.exit)text('Return ↓',a.x+a.w/2,a.y-18,13,th.ink,'center');
 }
 function drawBonusBackdrop(th){
- g.fillStyle=bonus.type===0?'#20182e88':'#28203d40';g.fillRect(0,0,W,H);
- if(bonus.type===0){g.strokeStyle=th.edge+'55';g.lineWidth=12;for(let x=-80;x<W+260;x+=250){g.beginPath();g.moveTo(x,GROUND);g.lineTo(x,220);g.quadraticCurveTo(x+100,65,x+200,220);g.lineTo(x+200,GROUND);g.stroke();ellipse(x+100,159,7,11,'#ffe1a5');ellipse(x+100,158,3,5,'#fff1c9');}}
+ g.fillStyle=(bonus.type===0||bonus.type===3)?'#20182e88':'#28203d40';g.fillRect(0,0,W,H);
+ if(bonus.type===0||bonus.type===3){g.strokeStyle=th.edge+'55';g.lineWidth=12;for(let x=-80;x<W+260;x+=250){g.beginPath();g.moveTo(x,GROUND);g.lineTo(x,220);g.quadraticCurveTo(x+100,65,x+200,220);g.lineTo(x+200,GROUND);g.stroke();ellipse(x+100,159,7,11,'#ffe1a5');ellipse(x+100,158,3,5,'#fff1c9');}}
  else if(bonus.type===1){for(let x=40;x<W;x+=90)starShape(x,150+Math.sin(anim+x*.01)*12,5,'#ffe7ac',4);}
  else{for(let x=40;x<W;x+=240){ellipse(x,GROUND,75,100,th.hill2+'77');ellipse(x-17,GROUND-45,10,16,'#ffffff22');}}
 }
 function drawBonusRoom(th){
  for(const a of coins)if(!a.got&&a.x>camera-20&&a.x<camera+W+20){const wobble=.5+Math.abs(Math.cos(anim*3+a.x*.01))*.5;ellipse(a.x,a.y,11*wobble,13,'#bd8b48');ellipse(a.x,a.y-1,8*wobble,10,'#ffe39a');g.strokeStyle='#c49a54';g.lineWidth=2;g.beginPath();g.moveTo(a.x,a.y-5);g.lineTo(a.x,a.y+4);g.stroke();}
+ if(bonus.type===3){for(let i=0;i<bonus.rows.length;i++){const row=bonus.rows[i];text('Tier '+(i+1),row.x-18,row.y-12,12,th.ink,'right');}}
  if(bonus.type===1){for(let j=0;j<8;j++)starShape(j*worldWidth/8+50,140+Math.sin(anim+j)*5,4,'#ffedb8',4)}
 }
 
@@ -383,6 +410,33 @@ $('#characterOptions').onclick=e=>{const button=e.target.closest('[data-look-col
 $('#characterOptions').onchange=e=>{if(e.target.id==='studioHat')studioHat=Number(e.target.value);else if(e.target.dataset.lookSelect)studioDraft[e.target.dataset.lookSelect]=e.target.value;renderLookPreview()};
 $('#resetLook').onclick=()=>{studioDraft={...defaultLooks()[studioTarget]};if(studioTarget==='hero')studioHat=0;renderStudioControls()};
 $('#previewWalk').onclick=()=>{studioWalking=!studioWalking;$('#previewWalk').setAttribute('aria-pressed',String(studioWalking));$('#previewWalk').textContent=studioWalking?'Walking preview':'Standing preview';renderLookPreview()};
+
+function setupLuckyLadder(exit){
+ const left=Math.max(80,(worldWidth-700)/2);bonus.rows=[];bonus.activeTier=0;bonus.correctRows=0;bonus.gameCleared=false;bonus.remaining=Infinity;bonus.duration=Infinity;bonus.target=mode==='gentle'?2:3;bonus.total=5;
+ for(let tier=0;tier<5;tier++){
+   const x=left+(tier%2)*200,y=GROUND-tier*180;
+   const platform={x,y,w:390,h:20,kind:'ledge',requiresTier:tier};ledges.push(platform);
+   const row={x,y,winner:Math.floor(Math.random()*3),chosen:null,resolved:false,won:false,blocks:[]};
+   for(let choice=0;choice<3;choice++){const b={x:x+50+choice*64,y:y-124,w:44,h:44,kind:'lucky',bonusTier:tier,choice,used:false,bump:0};blocks.push(b);row.blocks.push(b)}
+   bonus.rows.push(row);
+ }
+ const top=bonus.rows[4];Object.assign(exit,{x:top.x+305,y:top.y-65});
+}
+function pickLuckyBlock(block){
+ if(!bonus||bonus.type!==3||bonus.done||block.used||block.bonusTier!==bonus.activeTier)return;
+ const row=bonus.rows[block.bonusTier];if(row.resolved)return;row.resolved=true;row.chosen=block.choice;row.won=block.choice===row.winner;block.bump=.22;for(const a of row.blocks)a.used=true;
+ if(row.won){bonus.correctRows++;const value=(block.bonusTier+1)*5;collectCoin({x:block.x+22,y:block.y-15,got:false},value);floatText(block.x,block.y-20,'+'+value+' ●');tone(1060,.13);}
+ else{burst(block.x+22,block.y+22,'#c6b7d5',6);tone(170,.16,'triangle');}
+ bonus.activeTier++;
+ if(bonus.activeTier===5){bonus.gameCleared=true;chime();notify('Five tiers explored! Jump to the exit pipe. ↓');}
+ else notify(row.won?'A lucky block! Jump up to tier '+(bonus.activeTier+1)+'.':'Empty! This row is closed. Jump to tier '+(bonus.activeTier+1)+'.');
+}
+function drawLuckyBlock(b,th){
+ const row=bonus.rows[b.bonusTier],active=b.bonusTier===bonus.activeTier,chosen=row.resolved&&row.chosen===b.choice,y=b.y-Math.sin(b.bump/.22*Math.PI)*9;
+ g.save();if(b.bonusTier>bonus.activeTier)g.globalAlpha=.3;
+ const fill=b.used?(chosen?(row.won?'#b9efd4':'#bd9eb5'):th.dirt):'#ffd48a';round(b.x,y,b.w,b.h,6,fill,th.dirt2);if(!b.used)round(b.x+5,y+5,34,4,2,'#ffeab9');text(b.used?(chosen?(row.won?'●':'×'):'·'):'?',b.x+22,y+32,b.used?24:29,b.used?th.ink:'#785447','center','800');
+ if(active&&!b.used){g.strokeStyle='#ffeabc88';g.lineWidth=2;g.beginPath();g.roundRect(b.x-3,y-3,50,50,8);g.stroke()}g.restore();
+}
 
 function frame(now){const elapsed=Math.min(.05,(now-lastNow)/1000||0);lastNow=now;updateEffects(elapsed);if(state==='playing'){accumulator+=elapsed;let steps=0;while(accumulator>=STEP&&steps++<8){physics(STEP);accumulator-=STEP;if(state!=='playing')break}}else accumulator=0;render();hud();if($('#characterDialog').open)renderLookPreview();requestAnimationFrame(frame)}
 $('#start').onclick=start;$('#pause').onclick=pause;$('#menu').onclick=()=>setMenu(!document.body.classList.contains('menu-open'));$('#closeMenu').onclick=()=>setMenu(false);$('#scrim').onclick=()=>setMenu(false);$('#ability').onclick=()=>{ability();c.focus()};$('#theme').onchange=e=>{theme=e.target.value;chooseStage(0)};$('#mode').onchange=e=>{mode=e.target.value;save()};$('#buddyChoices').onclick=e=>{const b=e.target.closest('[data-buddy]');if(b){buddy=Number(b.dataset.buddy);save();updateUI()}};$('#sound').onclick=()=>{sound=!sound;save();updateUI();if(sound)tone(600,.1)};$('#outfit').onclick=()=>{const next=(hat+1)%4;if(bank<next*5){notify('Find '+next*5+' wardrobe stars to unlock '+['none','the bow','the top hat','the crown'][next]);return}hat=next;save();updateUI()};$('#restart').onclick=()=>{makeLevel();state='ready';menuWasPlaying=false;showOverlay('ready');setMenu(false)};

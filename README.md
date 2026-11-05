@@ -21,9 +21,13 @@ Use **Map** to choose one of five lands and a level spot. Completed stages and f
 
 Use **Characters** to build Emilia's look from outfits, hairstyles, skin tones, eye styles, colors, accessories, and unlockable hats. Pip, Mochi, and Luna have their own color and accessory choices. The live preview shows each selection before **Use this look** saves it. No drawing is required.
 
-Secret entrances blend in with the scenery; there are no secret-trail signs. Three different coin games hide in every stage: a coin vault, a falling-coin challenge, and a bouncing challenge. Reaching the target earns a hidden gem, extra coins, and wardrobe stars. Every collected coin is kept even if time runs out. Returning restores the level, checkpoint, health, enemies, and active powers.
+Secret entrances blend in with the scenery; there are no secret-trail signs. Three entrances in each stage lead to a rotating selection of four coin games: a coin vault, a falling-coin challenge, a bouncing challenge, and a five-tier mystery-block ladder. Reaching the target earns a hidden gem, extra coins, and wardrobe stars. Every collected coin is kept even if time runs out. Returning restores the level, checkpoint, health, enemies, and active powers.
+
+In the mystery ladder, jump under one of three blocks on each tier. One holds coins; an empty guess closes the other blocks on that tier. Each guess unlocks the next floor. Double jump up to keep trying, then leave through the top pipe after all five tiers. Higher tiers pay more coins. This room has no timer; two winning tiers in Gentle mode or three in Adventure mode earn its hidden gem.
 
 Settings contain sound and difficulty controls. Coins, stars, rescued friends, completed stages, and character choices save in the current browser.
+
+The page includes Open Graph and large Twitter card metadata with original wide and square cover art in `public/assets`. Preview images use absolute HTTPS URLs, descriptive alternative text, and their actual pixel dimensions. The wide cover is the default sharing image.
 
 ## Make changes
 

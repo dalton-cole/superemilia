@@ -60,11 +60,27 @@ test('Bonus rewards save and returning preserves the exact level, checkpoint, he
  assert(run("state==='bonusComplete'&&bonus.success&&stageGems===1"));assert.equal(run('coinBank'),38);assert.equal(run('stageCoins'),30);assert.equal(run('stageStars'),12);assert.equal(run('bank'),12);
  const reward=run('coinBank');run('finishBonusRoom(false)');assert.equal(run('coinBank'),reward);run('start()');assert(run("state==='playing'&&bonus===null&&returnScene===null"));assert(run('p.hp===2&&time===12&&checkpointIndex===1&&spawn.x===900&&!enemies[0].alive'));assert(run('gems.filter(a=>a.got).length===1'));assert.equal(run("JSON.parse(localStorage.getItem('laserLeapRewards')).coins"),38);
 });
-test('All three mini-games end safely; failed attempts retain coins and timers stop in menus',()=>{
+test('Timed coin games end safely; failed attempts retain coins and timers stop in menus',()=>{
  const run=boot();for(let type=0;type<3;type++){
-  run(`makeLevel();state='playing';sound=false;enterBonus(pipes.find(a=>a.secret&&a.type===${type}));collectCoin(coins[0]||{x:0,y:0,got:false});openWorldMap()`);const remaining=run('bonus.remaining');run('frame(1000);frame(2000)');assert.equal(run('bonus.remaining'),remaining);run("$('#mapDialog').close()");assert.equal(run('state'),'playing');run('bonus.remaining=.001;physics(STEP)');assert.equal(run('state'),'bonusComplete');assert(!run('bonus.success'));const saved=run('coinBank');run('start()');assert.equal(run('coinBank'),saved);assert.equal(run('stageGems'),0);
+  run(`level=${type};makeLevel();state='playing';sound=false;enterBonus(pipes.find(a=>a.secret&&a.type===${type}));collectCoin(coins[0]||{x:0,y:0,got:false});openWorldMap()`);const remaining=run('bonus.remaining');run('frame(1000);frame(2000)');assert.equal(run('bonus.remaining'),remaining);run("$('#mapDialog').close()");assert.equal(run('state'),'playing');run('bonus.remaining=.001;physics(STEP)');assert.equal(run('state'),'bonusComplete');assert(!run('bonus.success'));const saved=run('coinBank');run('start()');assert.equal(run('coinBank'),saved);assert.equal(run('stageGems'),0);
  }
- run(`makeLevel();state='playing';enterBonus(pipes.find(a=>a.secret&&a.type===1));for(let i=0;i<600;i++)physics(STEP)`);assert(run('bonus.spawnCount>10&&coins.some(a=>a.falling)'));
+ run(`level=1;makeLevel();state='playing';enterBonus(pipes.find(a=>a.secret&&a.type===1));for(let i=0;i<600;i++)physics(STEP)`);assert(run('bonus.spawnCount>10&&coins.some(a=>a.falling)'));
+});
+test('Mystery blocks allow one guess per tier, lock the other choices, and keep every coin',()=>{
+ const run=boot();run(`state='playing';sound=false;enterBonus(pipes.find(a=>a.secret&&a.type===3));bonus.rows[0].winner=1;bumpBlock(bonus.rows[0].blocks[0])`);
+ assert(run('bonus.activeTier===1&&bonus.correctRows===0&&bonus.rows[0].blocks.every(b=>b.used)&&coinBank===0'));
+ run('bumpBlock(bonus.rows[0].blocks[1]);bumpBlock(bonus.rows[2].blocks[0])');assert(run('bonus.activeTier===1&&coinBank===0'));
+ run(`for(let tier=1;tier<5;tier++)bumpBlock(bonus.rows[tier].blocks[bonus.rows[tier].winner])`);
+ assert(run('bonus.activeTier===5&&bonus.gameCleared&&bonus.correctRows===4&&coinBank===70'));
+ run(`const exit=pipes[0];p.x=exit.x+19;p.y=exit.y-p.h;p.grounded=true;tryPipe()`);assert(run("state==='bonusComplete'&&bonus.success&&coinBank===80&&stageGems===1"));
+ run('start()');assert(run("state==='playing'&&bonus===null&&cameraY===0&&coinBank===80"));
+});
+test('The mystery ladder unlocks each floor, follows the upper tiers, and has no timer',()=>{
+ const run=boot();run(`state='playing';sound=false;enterBonus(pipes.find(a=>a.secret&&a.type===3));p.x=650;p.y=339-p.h;p.vy=180;physics(STEP)`);assert(!run('p.grounded'));
+ run(`bumpBlock(bonus.rows[0].blocks[0]);p.x=650;p.y=339-p.h;p.vy=180;physics(STEP)`);assert(run('p.grounded&&p.ground.requiresTier===1'));
+ run(`for(let tier=1;tier<4;tier++)bumpBlock(bonus.rows[tier].blocks[0]);p.x=210;p.y=-230;p.vy=0;physics(STEP);render();updateBonus(100000)`);
+ assert(run("cameraY<0&&state==='playing'&&!bonus.done&&bonus.remaining===Infinity"));
+ run(`p.x=pipes[0].x+19;p.y=pipes[0].y-p.h;p.grounded=true;tryPipe()`);assert.equal(run('state'),'playing');
 });
 test('The map launches the selected land and stage, then restores normal controls',()=>{
  const run=boot();run(`state='playing';openWorldMap()`);assert(run("state==='paused'&&$('#mapDialog').open"));run(`mapTheme='forest';mapLevel=9;drawWorldMap();$('#playMapLevel').onclick()`);assert(run("theme==='forest'&&level===9&&state==='playing'&&!$('#mapDialog').open&&bonus===null"));assert.equal(run("JSON.parse(localStorage.getItem('laserLeapRewards')).level"),9);
@@ -78,7 +94,14 @@ test('Character choices preview without changing the player until applied and pe
 test('Every world, bonus type and character outfit renders with saved customization',()=>{
  const run=boot();for(const th of ['space','candy','forest','squishy','home'])for(const outfit of ['suit','overalls','dress','hoodie']){
   run(`theme='${th}';makeLevel();looks.hero.outfit='${outfit}';looks.hero.hair='curly';looks.hero.accessory='glasses';render()`);
-  for(let type=0;type<3;type++)run(`state='playing';enterBonus(pipes.find(a=>a.secret&&a.type===${type}));render();finishBonusRoom(true);returnToLevel()`);
+  for(let type=0;type<4;type++)run(`level=${type};makeLevel();state='playing';enterBonus(pipes.find(a=>a.secret&&a.type===${type}));render();finishBonusRoom(true);returnToLevel()`);
  }
 });
-console.log(checks+' gameplay checks passed.');
+test('Share previews are static, use the canonical domain, and declare the actual image sizes',()=>{
+ const head=html.split('</head>')[0],tags=[...head.matchAll(/<meta (?:property|name)="([^"]+)" content="([^"]*)">/g)];
+ assert(head.includes('<link rel="canonical" href="https://superemilia.com/">'));assert(html.includes('Designed with ❤️ in Smyrna by Emilia'));
+ const pictures=[];for(const [,name,value] of tags){if(name==='og:image')pictures.push({url:value});else if(name.startsWith('og:image:'))pictures.at(-1)[name.slice(9)]=value}
+ assert.equal(pictures.length,2);for(const picture of pictures){const url=new URL(picture.url);assert.equal(url.origin,'https://superemilia.com');assert.equal(picture.type,'image/png');assert(picture.alt.length>20);const data=fs.readFileSync(require('path').resolve(__dirname,'../public'+url.pathname));assert.equal(data.toString('hex',0,8),'89504e470d0a1a0a');assert.equal(data.readUInt32BE(16),Number(picture.width));assert.equal(data.readUInt32BE(20),Number(picture.height));assert(data.length<5*1024*1024)}
+ assert(tags.some(([,name,value])=>name==='twitter:card'&&value==='summary_large_image'));assert(tags.some(([,name,value])=>name==='twitter:image'&&value===pictures[0].url));
+});
+console.log(checks+' checks passed.');
