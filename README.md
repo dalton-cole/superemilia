@@ -1,6 +1,6 @@
-# Super Emilia
+# Super Emilia World
 
-A little platform adventure with five worlds, three companion buddies, and 60 stages. Run, double jump, bounce on grumps, collect stars, discover hidden gems, and rescue friends.
+A little platform adventure with five lands, three companion buddies, and 60 stages. Run, double jump, bounce on grumps, discover hidden pipe entrances, collect coins in mini-games, and rescue friends.
 
 Play at **https://superemilia.com**. The game is hosted on GitHub Pages.
 
@@ -12,15 +12,24 @@ Play at **https://superemilia.com**. The game is hosted on GitHub Pages.
 | Jump / double jump | Space, Up, or W |
 | Run | Hold Shift |
 | World power | E |
+| Explore a pipe | Down or S while standing on its opening |
 | Pause / resume | P |
 
-On-screen controls support touch. Settings contain the world and stage selectors, buddies, hats, sound, and difficulty. Rewards save in the current browser.
+On-screen controls support touch. Tap **Run** to toggle sprinting, use the large direction and jump buttons, and press **↓** on a pipe opening. Toast messages appear below the top HUD.
+
+Use **Map** to choose one of five lands and a level spot. Completed stages and found treasures appear on the map. All stages are available to explore.
+
+Use **Characters** to build Emilia's look from outfits, hairstyles, skin tones, eye styles, colors, accessories, and unlockable hats. Pip, Mochi, and Luna have their own color and accessory choices. The live preview shows each selection before **Use this look** saves it. No drawing is required.
+
+Secret entrances blend in with the scenery; there are no secret-trail signs. Three different coin games hide in every stage: a coin vault, a falling-coin challenge, and a bouncing challenge. Reaching the target earns a hidden gem, extra coins, and wardrobe stars. Every collected coin is kept even if time runs out. Returning restores the level, checkpoint, health, enemies, and active powers.
+
+Settings contain sound and difficulty controls. Coins, stars, rescued friends, completed stages, and character choices save in the current browser.
 
 ## Make changes
 
 The complete game is in `public/index.html`; it has no dependencies or build step. Open that file in a browser to play locally, or run `python3 -m http.server --directory public`.
 
-Push changes to `main` to publish automatically. The **Deploy game to GitHub Pages** workflow checks the script, uploads only the `public` folder, and deploys to the `github-pages` environment.
+Push changes to `main` to publish automatically. The **Deploy game to GitHub Pages** workflow checks the script, runs `node tests/game.cjs`, uploads only the `public` folder, and deploys to the `github-pages` environment.
 
 ## Hosting and domain
 

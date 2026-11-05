@@ -35,6 +35,8 @@ jobs:
           new Function(script);
           console.log('Game script syntax passed.');
           JS
+      - name: Check gameplay, secret rooms, map, and character choices
+        run: node tests/game.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload the game
