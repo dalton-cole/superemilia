@@ -17,6 +17,8 @@ Play at **https://superemilia.com**. The game is hosted on GitHub Pages.
 
 On-screen controls support touch. Tap **Run** to toggle sprinting, use the large direction and jump buttons, and press **↓** on a pipe opening. Toast messages appear below the top HUD.
 
+**How to play** opens a scrollable popup from the footer or Settings. It pauses a running game and resumes it on close. Escape, the close button, or **Got it!** dismiss it; opening it from an already paused or ready screen preserves that state.
+
 Use **Map** to choose one of five lands and a level spot. Completed stages and found treasures appear on the map. All stages are available to explore.
 
 Use **Characters** to build Emilia's look from outfits, hairstyles, skin tones, eye styles, colors, accessories, and unlockable hats. Pip, Mochi, and Luna have their own color and accessory choices. The live preview shows each selection before **Use this look** saves it. No drawing is required.
@@ -27,7 +29,7 @@ In the mystery ladder, jump under one of three blocks on each tier. One holds co
 
 Settings contain sound and difficulty controls. Coins, stars, rescued friends, completed stages, and character choices save in the current browser.
 
-The page includes Open Graph and large Twitter card metadata with original wide and square cover art in `public/assets`. Preview images use absolute HTTPS URLs, descriptive alternative text, and their actual pixel dimensions. The wide cover is the default sharing image.
+The page includes Open Graph and large Twitter card metadata with original wide and square cover art in `public/assets`. Preview images use absolute HTTPS URLs, descriptive alternative text, and their actual pixel dimensions. The wide cover is the default sharing image. Titles and descriptions cover the 60 levels, five lands, buddies, secret coin games, character choices, and free browser play. Static JSON-LD connects the website, page, game, author credit, and cover image so readers can discover the game's details without executing JavaScript. Existing social posts may retain the preview cached by their platform.
 
 ## Make changes
 

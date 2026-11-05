@@ -85,6 +85,14 @@ test('The mystery ladder unlocks each floor, follows the upper tiers, and has no
 test('The map launches the selected land and stage, then restores normal controls',()=>{
  const run=boot();run(`state='playing';openWorldMap()`);assert(run("state==='paused'&&$('#mapDialog').open"));run(`mapTheme='forest';mapLevel=9;drawWorldMap();$('#playMapLevel').onclick()`);assert(run("theme==='forest'&&level===9&&state==='playing'&&!$('#mapDialog').open&&bonus===null"));assert.equal(run("JSON.parse(localStorage.getItem('laserLeapRewards')).level"),9);
 });
+test('The help popup freezes an active adventure and preserves ready and paused screens',()=>{
+ const run=boot();run(`state='playing';sound=false;time=12;p.x=200;keys.ArrowRight=true;openHowToPlay()`);
+ assert(run("state==='paused'&&$('#howToPlayDialog').open&&!keys.ArrowRight"));
+ run('pressed("Space");frame(1000);frame(2000)');assert(run('time===12&&p.x===200&&!keys.Space'));
+ run("$('#dismissHelp').onclick()");assert(run("state==='playing'&&!$('#howToPlayDialog').open"));
+ run("pause();openHowToPlay();$('#closeHelp').onclick()");assert(run("state==='paused'&&!$('#overlay').hidden"));
+ run("state='ready';openHowToPlay();$('#howToPlayDialog').close()");assert.equal(run('state'),'ready');
+});
 test('Character choices preview without changing the player until applied and persist for all buddies',()=>{
  const run=boot();run(`state='playing';openCharacterStudio();studioDraft.hair='braids';studioDraft.skin='#8c5b45';studioDraft.outfit='overalls';renderLookPreview()`);assert(run("looks.hero.hair==='none'&&state==='paused'"));run("$('#characterDialog').close()");assert(run("looks.hero.hair==='none'&&state==='playing'"));
  run(`openCharacterStudio();studioDraft.hair='braids';studioDraft.skin='#8c5b45';studioDraft.outfit='overalls';applyCharacterLook()`);assert(run("looks.hero.hair==='braids'&&looks.hero.skin==='#8c5b45'&&state==='playing'"));assert.equal(run("JSON.parse(localStorage.getItem('laserLeapRewards')).appearance.hero.outfit"),'overalls');
@@ -103,5 +111,11 @@ test('Share previews are static, use the canonical domain, and declare the actua
  const pictures=[];for(const [,name,value] of tags){if(name==='og:image')pictures.push({url:value});else if(name.startsWith('og:image:'))pictures.at(-1)[name.slice(9)]=value}
  assert.equal(pictures.length,2);for(const picture of pictures){const url=new URL(picture.url);assert.equal(url.origin,'https://superemilia.com');assert.equal(picture.type,'image/png');assert(picture.alt.length>20);const data=fs.readFileSync(require('path').resolve(__dirname,'../public'+url.pathname));assert.equal(data.toString('hex',0,8),'89504e470d0a1a0a');assert.equal(data.readUInt32BE(16),Number(picture.width));assert.equal(data.readUInt32BE(20),Number(picture.height));assert(data.length<5*1024*1024)}
  assert(tags.some(([,name,value])=>name==='twitter:card'&&value==='summary_large_image'));assert(tags.some(([,name,value])=>name==='twitter:image'&&value===pictures[0].url));
+ const meta=Object.fromEntries(tags.map(([,name,value])=>[name,value]));assert.equal(meta['og:description'],meta.description);assert.equal(meta['twitter:description'],meta.description);assert(meta.description.includes('60 levels')&&meta.description.includes('Pip, Mochi, and Luna')&&meta.description.length<200);assert.equal(meta['og:url'],'https://superemilia.com/');assert.equal(meta['og:title'],meta['twitter:title']);assert(meta['og:title'].length<70);
+});
+test('Search and link readers receive connected game, site, and cover details without running JavaScript',()=>{
+ const head=html.split('</head>')[0],data=JSON.parse(head.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+ assert.equal(data['@context'],'https://schema.org');const graph=data['@graph'],game=graph.find(n=>n['@type']==='VideoGame'),site=graph.find(n=>n['@type']==='WebSite'),page=graph.find(n=>n['@type']==='WebPage'),image=graph.find(n=>n['@id']===game.image['@id']);
+ assert.equal(game.name,'Super Emilia World');assert.equal(game.author.name,'Emilia');assert.equal(game.isAccessibleForFree,true);assert.equal(game.playMode,'https://schema.org/SinglePlayer');assert.equal(page.mainEntity['@id'],game['@id']);assert.equal(page.isPartOf['@id'],site['@id']);assert.equal(image.width,1717);assert.equal(image.height,916);assert.equal(game.url,site.url);assert.equal(game.featureList.length,5);assert.equal(game.creditText,'Designed with ❤️ in Smyrna by Emilia');
 });
 console.log(checks+' checks passed.');
