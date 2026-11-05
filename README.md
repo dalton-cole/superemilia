@@ -24,9 +24,9 @@ Push changes to `main` to publish automatically. The **Deploy game to GitHub Pag
 
 ## Hosting and domain
 
-Repository: https://github.com/dalton-cole/superemliia
+Repository: https://github.com/dalton-cole/superemilia
 
-GitHub Pages settings: https://github.com/dalton-cole/superemliia/settings/pages
+GitHub Pages settings: https://github.com/dalton-cole/superemilia/settings/pages
 
 The publishing source is **GitHub Actions**, with **superemilia.com** as the custom domain and HTTPS enforced once GitHub issues its certificate.
 
